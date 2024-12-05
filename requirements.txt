@@ -3,3 +3,4 @@ numpy==1.26.4
 numpyro==0.14.0
 pandas==2.2.2
 pandas-profiling==3.6.6
+scipy

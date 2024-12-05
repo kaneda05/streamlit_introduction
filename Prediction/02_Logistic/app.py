@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
-import japanize_matplotlib
 plt.style.use('ggplot')
 
 # ロジスティック成長曲線（認知率を考慮したバージョン）
