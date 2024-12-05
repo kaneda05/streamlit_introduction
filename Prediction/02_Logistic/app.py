@@ -10,7 +10,7 @@ plt.style.use('ggplot')
 def logistic_curve_with_awareness(x, L, r, x0):
     return L / (1 + np.exp(-r * (x  - x0)))
 
-st.markdown('ロジスティック曲線を使用したフィッティング')
+st.markdown('**ロジスティック曲線**を使用したフィッティング')
 st.latex('''y=\dfrac{L}{1+e^{-r(x-x_0)}}''')
 """
 - $L$：上限・飽和ライン
@@ -43,6 +43,11 @@ popt, _ = curve_fit(
     lambda x, L, k, x0: logistic_curve_with_awareness(x, L, k, x0),
     xdata, ydata, p0=p0, maxfev=10000
     )
+# 決定係数の計算
+residuals = ydata - logistic_curve_with_awareness(xdata, *popt)
+ss_res = np.sum(residuals**2)
+ss_tot = np.sum((ydata - np.mean(ydata))**2)
+r_squared = 1 - (ss_res/ss_tot)
 
 # フィッティング結果の予測カーブの計算
 x_fit = np.linspace(min(xdata), max(xdata)*2, 1000)
@@ -54,6 +59,7 @@ plt.scatter(xdata, ydata, label='Data', color='blue')
 plt.plot(x_fit, y_fit, label='Logistic Fit', color='red')
 plt.xlabel('awareness_rate')
 plt.ylabel('downloads')
+plt.text(0.05, 0.95, f'R^2 = {r_squared:.4f}', transform=plt.gca().transAxes, fontsize=12, verticalalignment='top')
 plt.legend()
 plt.title('Logistic Growth Curve')
 st.write(fig)
@@ -95,12 +101,19 @@ if uploaded_file is not None:
         x_fit = np.linspace(min(xdata), max(xdata)*1.5, 1000)
         y_fit = logistic_curve_with_awareness(x_fit, *popt)
 
+        # 決定係数の計算
+        residuals = ydata - logistic_curve_with_awareness(xdata, *popt)
+        ss_res = np.sum(residuals**2)
+        ss_tot = np.sum((ydata - np.mean(ydata))**2)
+        r_squared = 1 - (ss_res/ss_tot)
+
         # 結果のプロット
         fig = plt.figure(figsize=(10, 6))
         plt.scatter(xdata, ydata, label='Data', color='blue')
         plt.plot(x_fit, y_fit, label='Logistic Fit', color='red')
         plt.xlabel(f"{example_column}")
         plt.ylabel(f"{target_column}")
+        plt.text(0.05, 0.95, f'R^2 = {r_squared:.4f}', transform=plt.gca().transAxes, fontsize=12, verticalalignment='top')
         plt.legend()
         plt.title('Logistic Growth Curve')
         st.write(fig)
