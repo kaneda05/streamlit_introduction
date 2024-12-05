@@ -78,7 +78,7 @@ uploaded_file = st.file_uploader('ファイルをアップロードして下さ�
 if uploaded_file is not None:
     st.info("ファイルが正しくアップロードされました")
     df = pd.read_csv(uploaded_file)
-    st.table(df.head(5))
+    st.table(df.head(10))
     column_names = [c for c in df.columns]
     target_column = st.selectbox("目的変数を選んでください。", column_names)
     example_column = st.selectbox("説明変数を選んでください。", column_names)
